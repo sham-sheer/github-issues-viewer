@@ -36,7 +36,8 @@ export default class IssueComments extends Component {
             {issueComment}
           </ul>
           <div className="jumbotron">
-            <IssueCommentBox 
+            <IssueCommentBox
+              org={this.props.org}
               repo={this.props.repo}
               id={this.props.id}
             />

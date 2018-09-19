@@ -22,7 +22,7 @@ export default class IssueCommentBox extends Component {
 
   postComment = () => {
     if(this.state.value !== '') {
-      axios.post(`https://api.github.com/repos/sham-sheer/${this.props.repo}/issues/comments/${this.props.id}`, {
+      axios.post(`https://api.github.com/repos/${this.props.org}/${this.props.repo}/issues/${this.props.id}/comments`, {
         body: this.state.value
       })
       .then(function (response) {
