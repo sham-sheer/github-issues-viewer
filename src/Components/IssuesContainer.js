@@ -12,8 +12,8 @@ class IssuesContainer extends Component {
       issues: [],
       issuesCount: 0,
       activePage: 1,
-      org: 'rails',
-      repo: 'rails',
+      org: this.props.location.state.org,
+      repo: this.props.location.state.repo,
       noIssues: false
     }
   }
@@ -59,6 +59,14 @@ class IssuesContainer extends Component {
   handleSubmit = (event) => {
     event.preventDefault();
     this.fetchIssues();
+    const location = {
+      ...this.props.location,
+      state: {
+        org: this.state.org,
+        repo: this.state.repo
+      }
+    }
+    this.props.history.push(location);
   }
 
   render() {

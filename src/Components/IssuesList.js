@@ -14,6 +14,8 @@ class IssuesList extends Component {
               user={issue.user.login}
               org={org}
               repo={repo}
+              labels={issue.labels}
+
       />
 
     );

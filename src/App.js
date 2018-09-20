@@ -8,10 +8,10 @@ class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <Switch>
+
           <Route exact path={"/"} component={IssuesContainer} />
           <Route exact path={"/:org/:repo/:id"} component={IssueDescription} />
-          </Switch>
+          
         </div>
        </BrowserRouter>
     );
