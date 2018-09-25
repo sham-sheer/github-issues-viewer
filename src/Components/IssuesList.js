@@ -7,6 +7,7 @@ class IssuesList extends Component {
     const results = this.props.data;
     const org = this.props.org;
     const repo = this.props.repo;
+    const filteredValue = this.props.filteredValue;
 
     let issue = results.map(issue =>
       <Issue title={issue.title}
@@ -16,6 +17,7 @@ class IssuesList extends Component {
               org={org}
               repo={repo}
               labels={issue.labels}
+              filteredValue={filteredValue}
       />
 
     );

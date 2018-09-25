@@ -125,7 +125,7 @@ class IssuesContainer extends Component {
       </form>
       </nav>
         {this.state.filteredIssues.length > 0 ?
-          (<IssuesList data={this.state.filteredIssues} org={this.state.org} repo={this.state.repo} />) :
+          (<IssuesList data={this.state.filteredIssues} org={this.state.org} repo={this.state.repo} filteredValue={this.state.filteredValue} />) :
           (<IssuesList data={this.state.issues} org={this.state.org} repo={this.state.repo} />)
         }
           <div className="issues_pagination jumbotron">
