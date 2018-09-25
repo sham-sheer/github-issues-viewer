@@ -11,11 +11,11 @@ class IssuesList extends Component {
     let issue = results.map(issue =>
       <Issue title={issue.title}
               id={issue.number}
-              user={issue.user.login}
+              userName={issue.user.login}
+              pic={issue.user.avatar_url}
               org={org}
               repo={repo}
               labels={issue.labels}
-
       />
 
     );
@@ -24,7 +24,7 @@ class IssuesList extends Component {
         <ul className="list-group">
           {issue}
         </ul>
-        </div>
+      </div>
     );
   }
 }

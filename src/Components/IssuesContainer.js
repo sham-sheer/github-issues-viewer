@@ -1,33 +1,57 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import pic from './pic.png';
 import IssuesList from './IssuesList';
 import Pagination from 'react-js-pagination';
+import { Route, browserHistory, withRouter } from 'react-router-dom';
 import './IssuesContainer.css';
+import IssueRTS from './IssueRTS';
 
 
 class IssuesContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      issues: [],
-      issuesCount: 0,
-      activePage: 1,
-      org: this.props.location.state.org,
-      repo: this.props.location.state.repo,
-      noIssues: false
-    }
   }
 
+  state = {
+    issues: [],
+    issuesCount: 0,
+    activePage: 1,
+    org: 'rails',
+    repo: 'rails',
+    noIssues: true,
+    filteredValue: '',
+    filteredIssues: []
+  }
+
+  filterResults = (value) => {
+    let unfilteredIssues = this.state.issues;
+    let filtered = [];
+    if(value.length > 0) {
+      filtered = unfilteredIssues.filter((el) => el.title.match(value))
+    }
+    this.setState({
+      filteredValue : value,
+      filteredIssues : filtered
+    })
+  }
   componentDidMount() {
     this.fetchIssues();
   }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(prevState.noIssues !== this.state.noIssues) {
+      debugger
+      this.fetchIssues();
+  }
+}
 
   fetchIssues = () => {
     axios.get(`https://api.github.com/repos/${this.state.org}/${this.state.repo}/issues?page=${this.state.activePage}`)
     .then(resp => {
       this.setState({
         issues: resp.data,
-        issuesCount: resp.data.length
+        issuesCount: resp.data.length,
       })
     })
     .catch(error => {
@@ -58,22 +82,21 @@ class IssuesContainer extends Component {
 
   handleSubmit = (event) => {
     event.preventDefault();
+    this.setState({
+      noIssues: false
+    })
     this.fetchIssues();
-    const location = {
-      ...this.props.location,
-      state: {
-        org: this.state.org,
-        repo: this.state.repo
-      }
-    }
-    this.props.history.push(location);
+    this.setState({
+      noIssues: true
+    })
   }
 
   render() {
     return (
       <div className="container">
-       <nav class="navbar navbar-light bg-light">
-       <a class="navbar-brand">Github Issues</a>
+       <nav className="navbar navbar-light bg-light">
+       <img src={pic}></img>
+       <IssueRTS data={this.state.issues} handleFilter={this.filterResults} />
         <form onSubmit={this.handleSubmit} className="form-inline">
          <div className="form-group mb-2">
             <input
@@ -93,15 +116,18 @@ class IssuesContainer extends Component {
             value={this.state.repo}
             onChange={this.handleInputChange} />
         </div>
-        <div>
-        <input
-          type="submit"
-          value="Submit"
-          className="btn btn-outline-dark col-sm form-group mb-2" />
+         <div>
+         <input
+           type="submit"
+           value="Submit"
+           className="btn btn-outline-dark col-sm form-group mb-2" />
           </div>
       </form>
       </nav>
-        <IssuesList data={this.state.issues} org={this.state.org} repo={this.state.repo} />
+        {this.state.filteredIssues.length > 0 ?
+          (<IssuesList data={this.state.filteredIssues} org={this.state.org} repo={this.state.repo} />) :
+          (<IssuesList data={this.state.issues} org={this.state.org} repo={this.state.repo} />)
+        }
           <div className="issues_pagination jumbotron">
           <Pagination
             activePage={this.state.activePage}

@@ -5,13 +5,13 @@ import IssueDescription from './Components/IssueDescription';
 
 class App extends Component {
   render() {
+
     return (
       <BrowserRouter>
         <div>
-
-          <Route exact path={"/"} component={IssuesContainer} />
+          <Route exact path={"/"} render={(props) => <IssuesContainer {...props} />} />
+          <Route exact path={"/:org/:repo"} render={(props) => <IssuesContainer {...props} />} />
           <Route exact path={"/:org/:repo/:id"} component={IssueDescription} />
-          
         </div>
        </BrowserRouter>
     );

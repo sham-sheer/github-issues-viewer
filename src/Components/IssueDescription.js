@@ -33,6 +33,7 @@ export default class IssueDescription extends Component {
   render() {
     const title = "#" + this.state.id + " " +this.state.details.title;
     const body = this.state.details.body;
+
     return (
       <div className="container">
         <nav className="navbar navbar-light bg-light">
