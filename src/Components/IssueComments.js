@@ -25,7 +25,7 @@ export default class IssueComments extends Component {
 
   render() {
     if(this.state.comments === []) {
-      return (<div>No Comments</div>)
+      return (<div><h3>No Comments</h3></div>)
     } else {
       let issueComment = this.state.comments.map(comment =>
         <IssueComment body={comment.body} user={comment.user.login} />

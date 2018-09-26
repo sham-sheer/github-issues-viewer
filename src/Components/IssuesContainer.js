@@ -28,7 +28,7 @@ class IssuesContainer extends Component {
     let unfilteredIssues = this.state.issues;
     let filtered = [];
     if(value.length > 0) {
-      filtered = unfilteredIssues.filter((el) => el.title.match(value))
+      filtered = unfilteredIssues.filter((el) => el.title.trim().toLowerCase().match(value.toLowerCase()))
     }
     this.setState({
       filteredValue : value,

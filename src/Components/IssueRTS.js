@@ -18,7 +18,6 @@ export default class IssueRTS extends React.Component {
   }
 
   handleSubmit(event) {
-    alert('An essay was submitted: ' + this.state.searchString);
     event.preventDefault();
   }
 
