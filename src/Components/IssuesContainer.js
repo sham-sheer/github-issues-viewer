@@ -96,7 +96,6 @@ class IssuesContainer extends Component {
       <div className="container">
        <nav className="navbar navbar-light bg-light">
        <img src={pic}></img>
-       <IssueRTS data={this.state.issues} handleFilter={this.filterResults} />
         <form onSubmit={this.handleSubmit} className="form-inline">
          <div className="form-group mb-2">
             <input
@@ -124,6 +123,7 @@ class IssuesContainer extends Component {
           </div>
       </form>
       </nav>
+      <IssueRTS data={this.state.issues} handleFilter={this.filterResults} />
         {this.state.filteredIssues.length > 0 ?
           (<IssuesList data={this.state.filteredIssues} org={this.state.org} repo={this.state.repo} filteredValue={this.state.filteredValue} />) :
           (<IssuesList data={this.state.issues} org={this.state.org} repo={this.state.repo} />)

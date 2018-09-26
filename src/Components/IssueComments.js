@@ -24,7 +24,7 @@ export default class IssueComments extends Component {
   }
 
   render() {
-    if(this.state.comments === []) {
+    if(this.state.comments.length === 0) {
       return (<div><h3>No Comments</h3></div>)
     } else {
       let issueComment = this.state.comments.map(comment =>
