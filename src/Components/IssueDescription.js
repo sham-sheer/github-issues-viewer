@@ -35,11 +35,37 @@ export default class IssueDescription extends Component {
     })
   }
 
+  patchIssueDetails(number) {
+    axios({
+      url: `https://api.github.com/repos/${this.state.org}/${this.state.repo}/issues/${this.state.id}/`,
+      method: 'patch',
+      data: {
+        title: this.state.details.title,
+        body: this.state.value,
+        assignees: this.state.details.assignees,
+        milestone: this.state.details.milestone,
+        state: this.state.details.state,
+        labels: this.state.details.labels
+      },
+      auth: {
+        username: 'sham-sheer',
+        password: '370ca3dcb3715e7fe66f9728f54a54ac5017e29c'
+      }
+    })
+    .then(function (response) {
+      console.log(response)
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
   handleClick = (event) => {
     event.preventDefault();
     this.setState({
       editing: !this.state.editing,
-    })
+    });
+    this.patchIssueDetails();
   }
 
   handleChange = (event) => {

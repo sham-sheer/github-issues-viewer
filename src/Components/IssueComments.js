@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import IssueComment from './IssueComment';
 import IssueCommentBox from './IssueCommentBox';
+import ApiCalls from './ApiCalls';
 
 
 export default class IssueComments extends Component {
@@ -21,12 +22,10 @@ export default class IssueComments extends Component {
     .catch(error => {
       console.log(error);
     })
+
   }
 
   render() {
-    if(this.state.comments.length === 0) {
-      return (<div><h3>No Comments</h3></div>)
-    } else {
       let issueComment = this.state.comments.map(comment =>
         <IssueComment body={comment.body} user={comment.user.login} />
       );
@@ -45,5 +44,4 @@ export default class IssueComments extends Component {
         </div>
       )
     }
-  }
 }

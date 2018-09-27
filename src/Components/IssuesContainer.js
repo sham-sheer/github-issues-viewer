@@ -3,7 +3,7 @@ import axios from 'axios';
 import pic from './pic.png';
 import IssuesList from './IssuesList';
 import Pagination from 'react-js-pagination';
-import { Route, browserHistory, withRouter } from 'react-router-dom';
+import { Route, Link } from 'react-router-dom';
 import './IssuesContainer.css';
 import IssueRTS from './IssueRTS';
 
@@ -11,7 +11,7 @@ import IssueRTS from './IssueRTS';
 class IssuesContainer extends Component {
   constructor(props) {
     super(props);
-  }
+    }
 
   state = {
     issues: [],
@@ -19,10 +19,10 @@ class IssuesContainer extends Component {
     activePage: 1,
     org: 'rails',
     repo: 'rails',
-    noIssues: true,
     filteredValue: '',
     filteredIssues: []
   }
+
 
   filterResults = (value) => {
     let unfilteredIssues = this.state.issues;
@@ -35,16 +35,20 @@ class IssuesContainer extends Component {
       filteredIssues : filtered
     })
   }
+
+  componentWillMount() {
+    if(typeof this.props.history.location.state !== 'undefined') {
+      this.setState({
+        org: this.props.history.location.state.org,
+        repo: this.props.history.location.state.repo
+      });
+    }
+  }
+
   componentDidMount() {
     this.fetchIssues();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if(prevState.noIssues !== this.state.noIssues) {
-      debugger
-      this.fetchIssues();
-  }
-}
 
   fetchIssues = () => {
     axios.get(`https://api.github.com/repos/${this.state.org}/${this.state.repo}/issues?page=${this.state.activePage}`)
@@ -52,7 +56,12 @@ class IssuesContainer extends Component {
       this.setState({
         issues: resp.data,
         issuesCount: resp.data.length,
-      })
+      });
+      const state = {
+        org: this.state.org,
+        repo: this.state.repo
+      }
+      this.props.history.replace(this.props.location.pathname, state);
     })
     .catch(error => {
         if(this.state.org === '' || this.state.repo === '') {
@@ -125,17 +134,22 @@ class IssuesContainer extends Component {
       </nav>
       <IssueRTS data={this.state.issues} handleFilter={this.filterResults} />
         {this.state.filteredIssues.length > 0 ?
-          (<IssuesList data={this.state.filteredIssues} org={this.state.org} repo={this.state.repo} filteredValue={this.state.filteredValue} />) :
-          (<IssuesList data={this.state.issues} org={this.state.org} repo={this.state.repo} />)
+          (<IssuesList data={this.state.filteredIssues} org={this.state.org}
+          repo={this.state.repo} filteredValue={this.state.filteredValue} />) :
+          (<IssuesList data={this.state.issues} org={this.state.org}
+          repo={this.state.repo} />)
         }
           <div className="issues_pagination jumbotron">
-          <Pagination
-            activePage={this.state.activePage}
-            itemsCountPerPage={20}
-            totalItemsCount={300}
-            pageRangeDisplayed={10}
-            onChange={this.handlePageChange}
-          />
+          {
+            this.state.issues.length > 0 ?
+            (<Pagination
+              activePage={this.state.activePage}
+              itemsCountPerPage={20}
+              totalItemsCount={300}
+              pageRangeDisplayed={10}
+              onChange={this.handlePageChange}
+            />) : ("No Issues")
+          }
           </div>
       </div>
     );

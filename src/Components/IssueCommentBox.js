@@ -15,18 +15,25 @@ export default class IssueCommentBox extends Component {
   }
 
   handleSubmit = (event) => {
-    alert('A comment has been submitted: ' + this.state.value);
     event.preventDefault();
     this.postComment();
   }
 
   postComment = () => {
     if(this.state.value !== '') {
-      axios.post(`https://api.github.com/repos/${this.props.org}/${this.props.repo}/issues/${this.props.id}/comments`, {
-        body: this.state.value
+      axios({
+        url: `https://api.github.com/repos/${this.props.org}/${this.props.repo}/issues/${this.props.id}/comments`,
+        method: 'post',
+        data: {
+          body: this.state.value
+        },
+        auth: {
+          username: 'sham-sheer',
+          password: '370ca3dcb3715e7fe66f9728f54a54ac5017e29c'
+        }
       })
       .then(function (response) {
-        console.log(response);
+        console.log(response)
       })
       .catch(function (error) {
         console.log(error);
