@@ -4,18 +4,11 @@ import IssueComments from '../Components/IssueComments';
 import IssueCommentBox from '../Components/IssueCommentBox';
 import './IssueDescription.css';
 import { connect } from 'react-redux';
-import { getIssue, getComments, postComment } from '../redux/actions';
+import { getIssue, getComments, postComment, insertComment } from '../redux/actions';
 
 
 
 class IssueDescription extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      commentValue : ''
-    }
-  }
-
   componentWillMount() {
     const id = this.props.match.params.id;
     const org = this.props.match.params.org;
@@ -37,14 +30,8 @@ class IssueDescription extends Component {
     const id = this.props.match.params.id;
     const org = this.props.match.params.org;
     const repo =  this.props.match.params.repo;
-    const body = this.state.commentValue
+    const body = this.props.commentValue
     postComment(org, repo, id, body);
-  }
-
-  handleChange = (event) => {
-    this.setState({
-      value: event.target.value
-    })
   }
 
   render() {
@@ -65,8 +52,8 @@ class IssueDescription extends Component {
             org={this.props.match.params.org}
             repo={this.props.match.params.repo}
             id={this.props.match.params.id}
-            change={this.handleCommentBoxChange}
-            commentValue={this.state.commentValue}
+            change={this.props.handleCommentChange}
+            commentValue={this.props.commentValue}
             submitComment={this.handleCommentBoxSubmit}
           />
         </div>
@@ -78,10 +65,18 @@ class IssueDescription extends Component {
 const mapStateToProps = state => {
   return {
     issue: state.issue.issue,
-    comments: state.comments.comments
+    comments: state.comments.comments,
+    commentValue: state.comments.insertComment
   }
 }
 
-const mapDispatchToProps = { getIssue, getComments, postComment }
+//const mapDispatchToProps = { getIssue, getComments, postComment }
+
+const mapDispatchToProps = dispatch => ({
+  getIssue: (org, repo, id) => dispatch(getIssue(org, repo, id)),
+  getComments: (org, repo, id) => dispatch(getComments(org, repo, id)),
+  postComment: (org, repo, id, body) => dispatch(postComment(org, repo, id, body)),
+  handleCommentChange: event => dispatch(insertComment(event.target.value))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueDescription)

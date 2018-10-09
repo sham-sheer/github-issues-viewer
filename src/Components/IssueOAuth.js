@@ -37,6 +37,8 @@ export default class IssueOAuth extends React.Component {
           accessToken : resp.data.substring(13, 53),
           loggedIn : true
         })
+        const AUTH_TOKEN = resp.data.substring(13, 53);
+        axios.defaults.headers.common['Authorization'] = AUTH_TOKEN;
       })
       .catch(function (error) {
         console.log(error);
@@ -45,16 +47,16 @@ export default class IssueOAuth extends React.Component {
   }
 
   render() {
-    if(this.state.loggedIn) {
-      return (
-          <Redirect to="/home"/>
-      )
-    }
-    else {
-      return (
-        <div className="pageloader"><span className="title">Loading</span></div>
-      )
-    }
+      if(this.state.loggedIn) {
+        return (
+            <Redirect to="/home"/>
+        )
+      }
+      else {
+        return (
+          <div className="pageloader"><span className="title">Loading</span></div>
+        )
+      }
 
   }
 }

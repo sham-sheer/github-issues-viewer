@@ -4,6 +4,7 @@ import IssuesContainer from './Containers/IssuesContainer';
 import IssueDescription from './Containers/IssueDescription';
 import IssueLogin from './Components/IssueLogin';
 import IssueOAuth from './Components/IssueOAuth';
+import AccessContext from './Components/IssueOAuth';
 
 
 
@@ -11,10 +12,9 @@ class App extends Component {
 
   render() {
     return (
-
       <BrowserRouter>
         <div>
-          <Redirect from='/' to='/home' />
+          <Redirect exact from='/' to='/home'/>
           <Route path={"/callback"} component={IssueOAuth} />
           <Route exact path={"/login"} component={IssueLogin} />
           <Route exact path={"/home"} render={(props) => <IssuesContainer {...props} />} />

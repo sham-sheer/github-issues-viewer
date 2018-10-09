@@ -14,7 +14,6 @@ class IssuesContainer extends Component {
     repo: 'github-issues-viewer',
   }
 
-
   componentWillMount() {
     if(typeof this.props.history.location.state !== 'undefined') {
       this.setState({
@@ -42,6 +41,7 @@ class IssuesContainer extends Component {
   }
 
   handleInputChange = (event) => {
+    debugger
     const target = event.target;
     const value = target.value;
     const name = target.name;
