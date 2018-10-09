@@ -1,8 +1,9 @@
 import React from 'react';
 import querystring from 'query-string';
 import axios from 'axios';
-import IssueLogin from './IssueLogin';
-import { Route, Redirect } from 'react-router';
+import { Redirect } from 'react-router';
+
+
 
 export default class IssueOAuth extends React.Component {
   constructor() {
@@ -15,8 +16,6 @@ export default class IssueOAuth extends React.Component {
   componentDidMount() {
     this.redirect();
   }
-
-  component
 
   redirect() {
     const string = this.props.location.search;
@@ -48,12 +47,12 @@ export default class IssueOAuth extends React.Component {
   render() {
     if(this.state.loggedIn) {
       return (
-          <Redirect to="/"/>
+          <Redirect to="/home"/>
       )
     }
     else {
       return (
-        <div>Loading ...</div>
+        <div className="pageloader"><span className="title">Loading</span></div>
       )
     }
 

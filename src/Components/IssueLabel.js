@@ -1,7 +1,6 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 const IssueLabel = ({ name, color, url }) => {
-
   const styles = {
    backgroundColor: "#" + color,
   }

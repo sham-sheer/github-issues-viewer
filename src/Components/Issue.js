@@ -7,7 +7,7 @@ const Issue = ({ id, title, user, pic, org, repo, labels, filteredValue }) => {
   const link = `https://github.com/${user}`;
   const name = <a href={link} target="_blank">{user}</a>;
   const profile_image = <figure className="image is-48x48">
-                          <img className="is-rounded" src={pic} />
+                          <img className="is-rounded" src={pic} alt="No Profile Pic" />
                         </figure>;
   let issueLabel = labels.map(label =>
     <IssueLabel name={label.name}

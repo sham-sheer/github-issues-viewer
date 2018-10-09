@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import pic from './pic.png';
 import QueryString from 'query-string';
 
 export default class IssueLogin extends Component {
