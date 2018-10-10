@@ -123,7 +123,7 @@ export function postComment(org, repo, id, value) {
       },
       auth: {
         username: 'sham-sheer',
-        password: '892cef7f13188d817dba070ab5f783bd5118d4fd'
+        password: '2feb1931b86a5646907851145cc9108f3fa145e7'
       }
     })
     .then(resp => dispatch(postCommentSuccess(resp)))
