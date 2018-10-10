@@ -3,6 +3,7 @@ import axios from 'axios';
 import IssueComment from './IssueComment';
 import IssueCommentBox from './IssueCommentBox';
 import ApiCalls from './ApiCalls';
+import {UserContext} from './user-context';
 
 
 export default class IssueComments extends Component {
@@ -35,11 +36,18 @@ export default class IssueComments extends Component {
             {issueComment}
           </ul>
           <div className="jumbotron">
-            <IssueCommentBox
-              org={this.props.org}
-              repo={this.props.repo}
-              id={this.props.id}
-            />
+            <UserContext.Consumer>
+              {value =>
+                <IssueCommentBox
+                  user={value.username}
+                  password={value.password}
+                  org={this.props.org}
+                  repo={this.props.repo}
+                  id={this.props.id}
+                />
+              }
+            </UserContext.Consumer>
+
           </div>
         </div>
       )
