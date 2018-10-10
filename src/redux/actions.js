@@ -55,8 +55,9 @@ export function getIssuesFailure(error) {
 
 export function getIssues(org, repo, page) {
   return dispatch => {
+    console.log('dispatched');
     dispatch({type : GET_ISSUES_BEGIN});
-    axios.get(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
+    return axios.get(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
     .then(resp => dispatch(getIssuesSuccess(resp)))
     .catch(error => dispatch(getIssuesFailure(error)));
   }

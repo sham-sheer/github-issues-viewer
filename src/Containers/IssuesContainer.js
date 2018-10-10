@@ -41,7 +41,6 @@ class IssuesContainer extends Component {
   }
 
   handleInputChange = (event) => {
-    debugger
     const target = event.target;
     const value = target.value;
     const name = target.name;

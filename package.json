@@ -8,6 +8,7 @@
     "bootstrap-less": "^3.3.8",
     "bulma": "^0.7.1",
     "bulma-pageloader": "^2.1.0",
+    "fetch-mock": "^7.0.7",
     "marked": "^0.5.0",
     "proxy": "https://cors.io/",
     "query-string": "^6.1.0",
@@ -30,6 +31,8 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "jspm": "^0.16.53"
+    "jest": "^23.6.0",
+    "jspm": "^0.16.53",
+    "redux-mock-store": "^1.5.3"
   }
 }
