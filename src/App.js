@@ -8,17 +8,23 @@ import {UserContext} from './Components/user-context';
 
 
 class App extends Component {
+  state = {
+    accessToken : localStorage.getItem('at')
+  }
+  getToken = (value) => {
+    this.setState({
+      accessToken : value
+    })
+  }
   render() {
-    const username = 'sham-sheer';
-    const password = '892cef7f13188d817dba070ab5f783bd5118d4fd';
     return (
-      <UserContext.Provider value={{username, password}}>
+      <UserContext.Provider value={this.state.accessToken}>
       <BrowserRouter>
         <div>
-          <Route path={"/callback"} component={IssueOAuth} />
+          <Route path={"/callback"} render={(props) => <IssueOAuth {...props} passToken={this.getToken} />} />
           <Route exact path={"/login"} component={IssueLogin} />
-          <Route exact path={"/"} render={(props) => <IssuesContainer {...props} />} />
-          <Route exact path={"/:org/:repo/:id"} component={IssueDescription} />
+          <Route exact path={"/"} render={(props) => <IssuesContainer {...props} passToken={this.getToken} token={this.state.accessToken}/>} />
+          <Route exact path={"/:org/:repo/:id"} render={(props) => <IssueDescription {...props} token={this.state.accessToken} />} />
         </div>
        </BrowserRouter>
        </UserContext.Provider>

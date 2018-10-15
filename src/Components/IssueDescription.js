@@ -2,7 +2,10 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import IssueComments from './IssueComments';
-import './IssueDescription.css'
+import './IssueDescription.css';
+import {UserContext} from './user-context';
+import {Redirect} from 'react-router';
+
 
 
 export default class IssueDescription extends Component {
@@ -14,7 +17,8 @@ export default class IssueDescription extends Component {
       repo: this.props.match.params.repo,
       details : [],
       editing: false,
-      value: ''
+      value: '',
+      redirect: false
     }
   }
 
@@ -74,49 +78,95 @@ export default class IssueDescription extends Component {
     })
   }
 
-  render() {
-    const title = "#" + this.state.id + " " +this.state.details.title;
-    const text = this.state.value;
-    let button;
-    let body;
-    if (!this.state.editing) {
-      button = <a class="button is-warning" onClick={this.handleClick}>Edit</a>;
-      body = <ReactMarkdown source={text} />
-    } else {
-      button = <a class="button is-success" onClick={this.handleClick}>Save</a>
-      body = <form>
-              <div className="form-group">
-                <textarea
-                className="form-control"
-                rows="3"
-                value={this.state.value}
-                onChange={this.handleChange}
-                placeholder={text}
-                />
-              </div>
-            </form>
+  setRedirect = () => {
+    this.setState({
+      redirect: true
+    })
+  }
+
+  logIn = () => {
+    if(this.state.redirect) {
+      return (
+        <Redirect to='/login' />
+      )
     }
+  }
 
-
-    return (
-      <div className="container">
-        <nav className="navbar navbar-light bg-light">
-          <h4 className="title is-4">{title}</h4>
-        </nav>
-        <div id="details-body" className="jumbotron">
-          <div className="content">{body}</div>
-          <div>{button}</div>
-          <div className="jumbotron">
-            <h5 className="title is-5">Comments</h5>
-            <IssueComments
-              id={this.state.id}
-              org={this.state.org}
-              repo={this.state.repo}
-              />
+  render() {
+      if(this.props.token !== null) {
+        const title = "#" + this.state.id + " " +this.state.details.title;
+        const text = this.state.value;
+        let button;
+        let body;
+        if (!this.state.editing) {
+          button = <a class="button is-warning" onClick={this.handleClick}>Edit</a>;
+          body = <ReactMarkdown source={text} />
+        } else {
+          button = <a class="button is-success" onClick={this.handleClick}>Save</a>
+          body = <form>
+                  <div className="form-group">
+                    <textarea
+                    className="form-control"
+                    rows="3"
+                    value={this.state.value}
+                    onChange={this.handleChange}
+                    placeholder={text}
+                    />
+                  </div>
+                </form>
+        }
+        return (
+          <div className="container">
+            <nav className="navbar navbar-light bg-light">
+              <h4 className="title is-4">{title}</h4>
+            </nav>
+            <div id="details-body" className="jumbotron">
+              <div className="content">{body}</div>
+              <div>{button}</div>
+              <div className="jumbotron">
+                <h5 className="title is-5">Comments</h5>
+                <IssueComments
+                  id={this.state.id}
+                  org={this.state.org}
+                  repo={this.state.repo}
+                  />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-    );
+        );
+      }
+      else {
+        const title = "#" + this.state.id + " " +this.state.details.title;
+        const text = this.state.value;
+
+        let button = <a class="button is-info" onClick={this.setRedirect}>Login to Edit</a>;
+        let body = <ReactMarkdown source={text} />
+        return(
+          <div className="container">
+            <nav className="navbar navbar-light bg-light">
+              <h4 className="title is-4">{title}</h4>
+            </nav>
+            <div id="details-body" className="jumbotron">
+              <div className="content">{body}</div>
+              {this.logIn()}
+              <div>{button}</div>
+              <div className="jumbotron">
+                <h5 className="title is-5">Comments</h5>
+                <UserContext.Consumer>
+                {value =>
+                  <IssueComments
+                    token={value}
+                    id={this.state.id}
+                    org={this.state.org}
+                    repo={this.state.repo}
+                    />
+                }
+                </UserContext.Consumer>
+              </div>
+            </div>
+          </div>
+        )
+      }
   }
 
 }

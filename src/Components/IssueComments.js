@@ -28,7 +28,7 @@ export default class IssueComments extends Component {
 
   render() {
       let issueComment = this.state.comments.map(comment =>
-        <IssueComment body={comment.body} user={comment.user.login} />
+        <IssueComment body={comment.body} user={comment.user.login} token ={this.props.token}/>
       );
       return (
         <div>
@@ -39,8 +39,7 @@ export default class IssueComments extends Component {
             <UserContext.Consumer>
               {value =>
                 <IssueCommentBox
-                  user={value.username}
-                  password={value.password}
+                  token={value}
                   org={this.props.org}
                   repo={this.props.repo}
                   id={this.props.id}

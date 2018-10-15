@@ -16,7 +16,9 @@ export default class IssueOAuth extends React.Component {
     this.redirect();
   }
 
-  component
+  giveToken = () => {
+    this.props.passToken(this.state.accessToken)
+  }
 
   redirect() {
     const string = this.props.location.search;
@@ -33,11 +35,11 @@ export default class IssueOAuth extends React.Component {
       method: 'post'
       })
       .then(resp => {
-        console.log(resp);
         this.setState({
           accessToken : resp.data.substring(13, 53),
           loggedIn : true
         })
+        localStorage.setItem('at', resp.data.substring(13, 53));
       })
       .catch(function (error) {
         console.log(error);
@@ -47,6 +49,7 @@ export default class IssueOAuth extends React.Component {
 
   render() {
     if(this.state.loggedIn) {
+      this.giveToken();
       return (
           <Redirect to="/"/>
       )

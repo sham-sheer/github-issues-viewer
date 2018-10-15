@@ -6,6 +6,9 @@ import Pagination from 'react-js-pagination';
 import { Route, Link } from 'react-router-dom';
 import './IssuesContainer.css';
 import IssueRTS from './IssueRTS';
+import {Button} from 'react-bootstrap';
+import {Redirect} from 'react-router';
+import IssueLogButton from './IssueLogButton';
 
 
 class IssuesContainer extends Component {
@@ -20,7 +23,8 @@ class IssuesContainer extends Component {
     org: 'rails',
     repo: 'rails',
     filteredValue: '',
-    filteredIssues: []
+    filteredIssues: [],
+    token: ''
   }
 
 
@@ -45,7 +49,11 @@ class IssuesContainer extends Component {
     }
   }
 
+
   componentDidMount() {
+    this.setState({
+      token: this.props.token
+    })
     this.fetchIssues();
   }
 
@@ -100,7 +108,40 @@ class IssuesContainer extends Component {
     })
   }
 
+  handleLogOut = () => {
+    localStorage.clear();
+    this.setState({
+      token: ''
+    })
+  }
+
+  handleLogIn = () => {
+    this.setState({
+      redirect: true,
+      token: this.props.token
+    })
+  }
+
+  redirectToLogin = () => {
+    if(this.state.redirect) {
+      return (
+        <Redirect to='/login' />
+      )
+    }
+  }
+
   render() {
+    let LoginButton;
+    if(this.state.token !== '' && localStorage.getItem('at') !== null) {
+      LoginButton = <Button bsStyle="warning" onClick={this.handleLogOut}>
+                          Log Out
+                        </Button>
+    }
+    else {
+      LoginButton = <Button bsStyle="success" onClick={this.handleLogIn}>
+                      Log In
+                    </Button>
+    }
     return (
       <div className="container">
        <nav className="navbar navbar-light bg-light">
@@ -131,6 +172,8 @@ class IssuesContainer extends Component {
            className="btn btn-outline-dark col-sm form-group mb-2" />
           </div>
       </form>
+      {this.redirectToLogin()}
+      {LoginButton}
       </nav>
       <IssueRTS data={this.state.issues} handleFilter={this.filterResults} />
         {this.state.filteredIssues.length > 0 ?
