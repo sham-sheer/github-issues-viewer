@@ -21,6 +21,9 @@ export const POST_COMMENT_FAILURE  = 'POST_COMMENT_FAILURE';
 export const UPDATE_PAGE_COUNT = 'UPDATE_PAGE_COUNT';
 export const INSERT_COMMENT = 'INSERT_COMMENT';
 export const INSERT_ORG_AND_REPO = 'INSERT_ORG_AND_REPO';
+export const LOG_IN_BEGIN = 'LOG_IN_BEGIN';
+export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
+export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 
 
 export function updatePageCount(number) {
@@ -149,5 +152,28 @@ export function insertComment(value) {
   return {
     type: INSERT_COMMENT,
     value
+  }
+}
+
+export function loginSuccess(resp) {
+  return {
+    type: LOG_IN_SUCCESS,
+    accessToken: resp.data.substring(13, 53)
+  }
+}
+
+export function loginFailure(error) {
+  return {
+    type: LOG_IN_FAILURE,
+    error: error
+  }
+}
+
+export function login(code, query) {
+  return dispatch => {
+    dispatch({type : LOG_IN_BEGIN});
+    axios.post(`https://github.com/login/oauth/access_token?${query}`)
+    .then(resp => dispatch(loginSuccess(resp)))
+    .catch(error => dispatch(loginFailure(error)));
   }
 }
