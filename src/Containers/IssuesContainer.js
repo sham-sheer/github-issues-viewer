@@ -6,6 +6,7 @@ import './IssuesContainer.css';
 import IssueRTS from '../Components/IssueRTS';
 import { connect } from 'react-redux';
 import { getIssues, updatePageCount } from '../redux/actions';
+import LoginButton from '../Components/LoginButton';
 
 
 class IssuesContainer extends Component {
@@ -94,6 +95,7 @@ class IssuesContainer extends Component {
            className="btn btn-outline-dark col-sm form-group mb-2" />
           </div>
       </form>
+      <LoginButton />
       </nav>
       <IssueRTS data={this.props.issues} />
 
@@ -129,7 +131,8 @@ const mapStateToProps = state => {
     issues : state.issues.issues,
     org : state.issues.org,
     repo: state.issues.repo,
-    pageCount: state.issues.pageCount
+    pageCount: state.issues.pageCount,
+    accessToken: state.login.accessToken
   }
 }
 

@@ -24,6 +24,7 @@ export const INSERT_ORG_AND_REPO = 'INSERT_ORG_AND_REPO';
 export const LOG_IN_BEGIN = 'LOG_IN_BEGIN';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
+export const LOG_OUT = 'LOG_OUT';
 
 
 export function updatePageCount(number) {
@@ -175,5 +176,11 @@ export function login(code, query) {
     axios.post(`https://github.com/login/oauth/access_token?${query}`)
     .then(resp => dispatch(loginSuccess(resp)))
     .catch(error => dispatch(loginFailure(error)));
+  }
+}
+
+export function logout() {
+  return {
+    type: LOG_OUT,
   }
 }

@@ -18,7 +18,6 @@ class IssueOAuth extends React.Component {
       redirect_uri : 'http://localhost:3000/callback',
       state : 'hello'
     });
-    debugger
     login(code, query);
   }
 

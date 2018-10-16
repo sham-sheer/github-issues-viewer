@@ -4,7 +4,7 @@ import { GET_FILTERED_ISSUES_LIST, GET_ISSUES_BEGIN, GET_ISSUES_SUCCESS,
   GET_ISSUE_BEGIN, GET_ISSUE_FAILURE, GET_COMMENTS_BEGIN, GET_COMMENTS_SUCCESS,
 GET_COMMENTS_FAILURE, POST_COMMENT_BEGIN, POST_COMMENT_SUCCESS,
 POST_COMMENT_FAILURE, UPDATE_PAGE_COUNT, INSERT_COMMENT, LOG_IN_BEGIN,
-LOG_IN_SUCCESS, LOG_IN_FAILURE } from './actions';
+LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT } from './actions';
 import {combineReducers} from 'redux';
 
 
@@ -166,6 +166,11 @@ function loginReducer(state = initialLoginState, action) {
       return {
         ...state,
         error: action.error
+      }
+    case LOG_OUT:
+      return {
+        ...state,
+        accessToken: ''
       }
     default:
       return state;
