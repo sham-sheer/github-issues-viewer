@@ -17,8 +17,19 @@ class App extends Component {
   render() {
     const loggerMiddleware = createLogger();
 
+    const middleware = store => next => action => {
+  // Get the state before and after the action was performed
+      if (action.type === 'LOG_IN_SUCCESS') {
+        window.localStorage.setItem('at', action.accessToken);
+      }
+      if (action.type === 'LOG_OUT') {
+        window.localStorage.setItem('at', '');
+      }
+      return next(action);
+    }
+
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-    const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunkMiddleware, loggerMiddleware)));
+    const store = createStore(rootReducer, composeEnhancers(applyMiddleware(middleware, thunkMiddleware, loggerMiddleware)));
     return (
       <Provider store={store}>
       <BrowserRouter>

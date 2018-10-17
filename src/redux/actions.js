@@ -180,6 +180,7 @@ export function login(code, query) {
 }
 
 export function logout() {
+  localStorage.setItem('at', '');
   return {
     type: LOG_OUT,
   }

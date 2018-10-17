@@ -21,7 +21,7 @@ const initialState = {
   error: null
 };
 
-function issuesReducer(state = initialState, action) {
+export function issuesReducer(state = initialState, action) {
   switch(action.type) {
     case UPDATE_PAGE_COUNT:
       return {
@@ -58,7 +58,7 @@ function issuesReducer(state = initialState, action) {
         ...state,
         error : action.error,
         isError : true,
-        isFetchingIssue: false
+        isFetchingIssues: false
       }
     default:
       return state;
@@ -73,7 +73,7 @@ const initialIssueState = {
   isError: false
 };
 
-function issueReducer(state = initialIssueState, action) {
+export function issueReducer(state = initialIssueState, action) {
   switch(action.type) {
     case GET_ISSUE_BEGIN:
       return {
@@ -106,7 +106,7 @@ const initialCommentsState = {
   insertComment: ''
 }
 
-function commentsReducer(state = initialCommentsState, action) {
+export function commentsReducer(state = initialCommentsState, action) {
   switch(action.type) {
     case GET_COMMENTS_BEGIN:
       return {
@@ -151,7 +151,7 @@ const initialLoginState = {
   error: ''
 }
 
-function loginReducer(state = initialLoginState, action) {
+export function loginReducer(state = initialLoginState, action) {
   switch(action.type) {
     case LOG_IN_BEGIN:
       return {

@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 class LoginButton extends React.Component{
   render() {
     const { logout } = this.props
-    if(this.props.accessToken === '') {
+    if(localStorage.getItem('at') === '' && this.props.accessToken === '') {
       return (
         <Link to={`/login`} >
           <a className="button is-primary">Login with Github</a>

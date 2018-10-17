@@ -304,7 +304,9 @@ const fakeIssues = [
       "patch_url": "https://github.com/rails/rails/pull/34077.patch"
     },
     "body": "### Summary\r\nWhen going through the ActiveStorage guide, I thought it was odd that there were configurations for `development` and `production` but not `test`. I mentally noted that I never set it up and figured it might be ok. Later, when trying to test adding an attachment, I ran into this issue.\r\n\r\n\r\n### Other Information\r\nAt least two other people have had this same issue too: https://stackoverflow.com/a/47584366"
-  },
+  }
+]
+  /*
   {
     "url": "https://api.github.com/repos/rails/rails/issues/34076",
     "repository_url": "https://api.github.com/repos/rails/rails",
@@ -2588,7 +2590,6 @@ const fakeIssues = [
       "patch_url": "https://github.com/rails/rails/pull/34022.patch"
     },
     "body": "### Summary\r\n\r\nAllow passing `:as` option allows to set up a custom name for the generated\r\nmethod:\r\n\r\n```ruby\r\nclass Parcel < Struct.new(:client)\r\n  delegate :address, to: :client, as: :destination\r\nend\r\n\r\nparcel.destination # same as parcel.client.address\r\n```\r\n\r\n### Other Information\r\n\r\nThis option can be useful when the delegated method name is too long or not very meaningful in the context of a current class. Currently in order to do that I have to do something like\r\n\r\n```ruby\r\nclass Parcel < Struct.new(:client)\r\n  delegate :address, to: :client\r\n  alias_method destination  address\r\nend\r\n```\r\n\r\nor\r\n\r\n```ruby\r\nclass Parcel < Struct.new(:client)\r\n  def destination\r\n    client.address\r\n  end\r\nend\r\n```\r\n\r\nLimitations:\r\n\r\n- throws an exception when both :as and :prefix options are provided\r\n- only one method can be delegated when :as option is passed"
-  }
-]
-
+  }]
+*/
 export default fakeIssues;
