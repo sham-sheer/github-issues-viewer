@@ -7,6 +7,9 @@ import { GET_FILTERED_ISSUES_LIST, GET_ISSUES_BEGIN, GET_ISSUES_SUCCESS,
 GET_COMMENTS_FAILURE, POST_COMMENT_BEGIN, POST_COMMENT_SUCCESS,
 POST_COMMENT_FAILURE, UPDATE_PAGE_COUNT, INSERT_COMMENT } from './actions';
 import fetchMock from 'fetch-mock';
+import MockAdapter from 'axios-mock-adapter';
+import axios from 'axios';
+
 
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -46,9 +49,14 @@ describe('async actions', () => {
     fetchMock.restore();
   })
   it('creates GET_ISSUES_SUCCESS when getting issues has been done', () => {
-    fetchMock.mock('https://api.github.com/repos/sham-sheer/github-issues-viewer/issues?page=1', { issues: { issues: ['mock issue']}})
+    fetchMock.getOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues?page=1", { issues: { issues: ['mock issue']}})
 
-    const expectedAction = [{"type": "GET_ISSUES_BEGIN"}, {"type": "GET_ISSUES_SUCCESS"}];
+    const expectedAction = [{"type": "GET_ISSUES_BEGIN"},
+    {
+      "isFetchingIssues": false,
+      "issues": {"issues": {"issues": ["mock issue"]}},
+      "type": "GET_ISSUES_SUCCESS"
+    }];
 
     const store = mockStore({ issues : []})
 
@@ -56,44 +64,64 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual(expectedAction)
     })
   })
-})
 
-const fake = [{"type": "GET_ISSUES_BEGIN"}, {"isFetchingIssues": false,
-"issues": [{"assignee": null, "assignees": [],
-"author_association": "OWNER",
-"body": "### Test title\n\nTest Body",
-"closed_at": null,
-"comments": 27,
-"comments_url": "https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/1/comments",
-"created_at": "2018-09-26T18:06:11Z",
-"events_url": "https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/1/events",
-"html_url": "https://github.com/sham-sheer/github-issues-viewer/issues/1",
-"id": 364147404,
-"labels": [],
-"labels_url": "https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/1/labels{/name}",
-"locked": false,
-"milestone": null,
-"node_id": "MDU6SXNzdWUzNjQxNDc0MDQ=",
-"number": 1,
-"repository_url": "https://api.github.com/repos/sham-sheer/github-issues-viewer",
-"state": "open",
-"title": "Test Issue",
-"updated_at": "2018-10-09T18:31:27Z",
-"url": "https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/1",
-"user": {"avatar_url": "https://avatars2.githubusercontent.com/u/18659784?v=4",
-"events_url": "https://api.github.com/users/sham-sheer/events{/privacy}",
-"followers_url": "https://api.github.com/users/sham-sheer/followers",
-"following_url": "https://api.github.com/users/sham-sheer/following{/other_user}",
-"gists_url": "https://api.github.com/users/sham-sheer/gists{/gist_id}",
-"gravatar_id": "", "html_url": "https://github.com/sham-sheer",
-"id": 18659784,
-"login": "sham-sheer",
-"node_id": "MDQ6VXNlcjE4NjU5Nzg0",
-"organizations_url": "https://api.github.com/users/sham-sheer/orgs",
-"received_events_url": "https://api.github.com/users/sham-sheer/received_events",
-"repos_url": "https://api.github.com/users/sham-sheer/repos",
-"site_admin": false,
-"starred_url": "https://api.github.com/users/sham-sheer/starred{/owner}{/repo}",
-"subscriptions_url": "https://api.github.com/users/sham-sheer/subscriptions",
-"type": "User", "url": "https://api.github.com/users/sham-sheer"}}],
-"issuesCount": 1, "type": "GET_ISSUES_SUCCESS"}]
+  it('creates GET_ISSUE_SUCCESS when getting issues has been done', () => {
+    fetchMock.getOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5", { issue: { issue: ['mock issue']}})
+
+    const expectedAction = [{"type": "GET_ISSUE_BEGIN"},
+    {
+      "isFetchingIssue": false,
+      "issue": {"issue": {"issue": ["mock issue"]}},
+      "type": "GET_ISSUE_SUCCESS"
+    }];
+
+    const store = mockStore({ issue : []})
+
+    return store.dispatch(actions.getIssue('sham-sheer', 'github-issues-viewer', '5')).then(() => {
+      expect(store.getActions()).toEqual(expectedAction)
+    })
+  })
+
+  it('creates GET_COMMENTS_SUCCESS when getting comments has been done', () => {
+    fetchMock.getOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5", { issue: { issue: ['mock issue']}})
+
+    const expectedAction = [{"type": "GET_ISSUE_BEGIN"},
+    {
+      "isFetchingIssue": false,
+      "issue": {"issue": {"issue": ["mock issue"]}},
+      "type": "GET_ISSUE_SUCCESS"
+    }];
+
+    const store = mockStore({ issue : []})
+
+    return store.dispatch(actions.getIssue('sham-sheer', 'github-issues-viewer', '5')).then(() => {
+      expect(store.getActions()).toEqual(expectedAction)
+    })
+  })
+
+  //not working yet
+  /*it('creates POST_COMMENT_SUCCESS when posting comments has been done', () => {
+    const data =  {
+      body: 'posted comment'
+    }
+    fetchMock.postOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5/comments", {
+        status: 200,
+        body: JSON.stringify(data),
+        statusText: 'OK',
+        headers: {'Content-Type': 'application/json'},
+        sendAsJson: false
+      })
+
+    const expectedAction = [{"type": "POST_COMMENT_BEGIN"},
+    {
+      "comments": {"comment": {"body": ["posted comment"]}},
+      "type": "POST_COMMENT_SUCCESS"
+    }];
+
+    const store = mockStore({ issue : []})
+
+    return store.dispatch(actions.postComment('sham-sheer', 'github-issues-viewer', '5')).then(() => {
+      expect(store.getActions()).toEqual(expectedAction)
+    })
+  })*/
+})

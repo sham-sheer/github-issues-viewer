@@ -14,7 +14,6 @@ const initialState = {
   repo: 'rails',
   filteredValue: '',
   filteredIssues: [],
-  issuesCount: 0,
   pageCount: 1,
   isFetchingIssues: false,
   isError: false,
@@ -49,7 +48,6 @@ export function issuesReducer(state = initialState, action) {
       return {
         ...state,
         issues : action.issues,
-        issuesCount : action.issuesCount,
         isFetchingIssues : false,
         isError : false
       }
@@ -103,7 +101,8 @@ const initialCommentsState = {
   comment: [],
   errorGet: '',
   errorPost: '',
-  insertComment: ''
+  insertComment: '',
+  isFetchingComments: false
 }
 
 export function commentsReducer(state = initialCommentsState, action) {
@@ -111,30 +110,37 @@ export function commentsReducer(state = initialCommentsState, action) {
     case GET_COMMENTS_BEGIN:
       return {
         ...state,
+        isFetchingComments: true
       }
     case GET_COMMENTS_SUCCESS:
       return {
         ...state,
         comments: action.comments,
+        isFetchingComments: false
       }
     case GET_COMMENTS_FAILURE:
       return {
         ...state,
         errorGet: action.error,
+        isFetchingComments: false
+
       }
     case POST_COMMENT_BEGIN:
       return {
         ...state,
+        isFetchingComments: true
       }
     case POST_COMMENT_SUCCESS:
       return {
         ...state,
-        comment: action.comment
+        comment: action.comment,
+        isFetchingComments: false
       }
     case POST_COMMENT_FAILURE:
       return {
         ...state,
-        errorPost: action.error
+        errorPost: action.error,
+        isFetchingComments: false
       }
     case INSERT_COMMENT:
       return {

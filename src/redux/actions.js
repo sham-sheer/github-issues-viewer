@@ -42,11 +42,11 @@ export function getFilteredList(value) {
 }
 
 export function getIssuesSuccess(resp) {
+  debugger
   return {
     type: GET_ISSUES_SUCCESS,
-    issues : resp.data,
+    issues : resp,
     isFetchingIssues : false,
-    issuesCount : resp.data.length
   }
 }
 
@@ -59,10 +59,10 @@ export function getIssuesFailure(error) {
 
 export function getIssues(org, repo, page) {
   return dispatch => {
-    console.log('dispatched');
     dispatch({type : GET_ISSUES_BEGIN});
-    return axios.get(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
-    .then(resp => dispatch(getIssuesSuccess(resp)))
+    return fetch(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
+    .then(resp => resp.json())
+    .then(respJSON => dispatch(getIssuesSuccess(respJSON)))
     .catch(error => dispatch(getIssuesFailure(error)));
   }
 }
@@ -70,7 +70,7 @@ export function getIssues(org, repo, page) {
 export function getIssueSuccess(resp) {
   return {
     type: GET_ISSUE_SUCCESS,
-    issue: resp.data,
+    issue: resp,
     isFetchingIssue: false,
   }
 }
@@ -85,8 +85,9 @@ export function getIssueFailure(error) {
 export function getIssue(org, repo, id) {
   return dispatch => {
     dispatch({type : GET_ISSUE_BEGIN});
-    axios.get(`https://api.github.com/repos/${org}/${repo}/issues/${id}`)
-    .then(resp => dispatch(getIssueSuccess(resp)))
+    return fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}`)
+    .then(resp => resp.json())
+    .then(respJSON => dispatch(getIssueSuccess(respJSON)))
     .catch(error => dispatch(getIssueFailure(error)));
   }
 }
@@ -94,7 +95,7 @@ export function getIssue(org, repo, id) {
 export function getCommentsSuccess(resp) {
   return {
     type: GET_COMMENTS_SUCCESS,
-    comments: resp.data,
+    comments: resp,
     isFetchingComments: false,
   }
 }
@@ -110,8 +111,9 @@ export function getCommentsFailure(error) {
 export function getComments(org, repo, id) {
   return dispatch => {
     dispatch({type : GET_COMMENTS_BEGIN});
-    axios.get(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`)
-    .then(resp => dispatch(getCommentsSuccess(resp)))
+    return fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`)
+    .then(resp => resp.json())
+    .then(respJSON => dispatch(getCommentsSuccess(respJSON)))
     .catch(error => dispatch(getCommentsFailure(error)));
   }
 }
@@ -119,7 +121,7 @@ export function getComments(org, repo, id) {
 export function postComment(org, repo, id, value) {
   return dispatch => {
     dispatch({type : POST_COMMENT_BEGIN});
-    axios({
+    return fetch({
       url: `https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`,
       method: 'post',
       data: {
@@ -130,7 +132,8 @@ export function postComment(org, repo, id, value) {
         password: '2feb1931b86a5646907851145cc9108f3fa145e7'
       }
     })
-    .then(resp => dispatch(postCommentSuccess(resp)))
+    .then(resp => resp.json())
+    .then(respJSON => dispatch(postCommentSuccess(respJSON)))
     .catch(error => dispatch(postCommentFailure(error)));
   }
 }
@@ -138,7 +141,7 @@ export function postComment(org, repo, id, value) {
 export function postCommentSuccess(resp) {
   return {
     type: POST_COMMENT_SUCCESS,
-    comment: resp.data
+    comment: resp
   }
 }
 

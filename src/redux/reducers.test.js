@@ -16,7 +16,6 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-        issuesCount: 0,
         pageCount: 1,
         isFetchingIssues: false,
         isError: false,
@@ -32,7 +31,6 @@ describe('issues reducer', () => {
       repo: 'rails',
       filteredValue: '',
       filteredIssues: [],
-      issuesCount: 0,
       pageCount: 1,
       isFetchingIssues: false,
       isError: false,
@@ -44,7 +42,6 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-        issuesCount: 0,
         pageCount: 1,
         isFetchingIssues: true,
         isError: false,
@@ -62,7 +59,6 @@ describe('issues reducer', () => {
       repo: 'rails',
       filteredValue: '',
       filteredIssues: [],
-      issuesCount: 0,
       pageCount: 1,
       isFetchingIssues: false,
       isError: false,
@@ -74,7 +70,7 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-        issuesCount: 0,
+
         pageCount: number,
         isFetchingIssues: false,
         isError: false,
@@ -97,7 +93,6 @@ describe('issues reducer', () => {
       repo: 'rails',
       filteredValue: '',
       filteredIssues: [],
-      issuesCount: 0,
       pageCount: 1,
       isFetchingIssues: true,
       isError: false,
@@ -109,7 +104,6 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-        issuesCount: undefined,
         pageCount: 1,
         isFetchingIssues: false,
         isError: false,
@@ -129,7 +123,6 @@ describe('issues reducer', () => {
       repo: 'rails',
       filteredValue: '',
       filteredIssues: [],
-      issuesCount: 0,
       pageCount: 1,
       isFetchingIssues: true,
       isError: false,
@@ -141,7 +134,7 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-        issuesCount: 0,
+
         pageCount: 1,
         isFetchingIssues: false,
         isError: true,
@@ -259,7 +252,6 @@ describe('issues reducer', () => {
       repo: 'rails',
       filteredValue: '',
       filteredIssues: [],
-      issuesCount: 0,
       pageCount: 1,
       isFetchingIssues: false,
       isError: false,
@@ -271,7 +263,7 @@ describe('issues reducer', () => {
         repo: 'rails',
         filteredValue: value,
         filteredIssues: filtered,
-        issuesCount: 0,
+
         pageCount: 1,
         isFetchingIssues: false,
         isError: false,
@@ -392,6 +384,141 @@ describe('login reducer', () => {
       {
         accessToken: '',
         error: ''
+      }
+    )
+  })
+})
+
+describe('commments reducer', () => {
+  it('should begin performing the GET request for the comments', () => {
+    expect(commentsReducer(
+    {
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: false
+    }, {type: GET_COMMENTS_BEGIN})).toEqual(
+      {
+        comments: [],
+        comment: [],
+        errorGet: '',
+        errorPost: '',
+        insertComment: '',
+        isFetchingComments: true
+      }
+    )
+  })
+
+  it('should have successfully performed the GET request for comments', () => {
+    const resp = {
+      "comments" : "Example comment"
+    }
+    expect(commentsReducer({
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: true
+    }, {type: GET_COMMENTS_SUCCESS, comments : resp})).toEqual(
+    {
+      comments: resp ,
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: false
+    }
+    )
+  })
+
+  it('should have failed the GET request for comments', () => {
+    const error = {
+      "error" : "error getting the comments"
+    }
+    expect(commentsReducer({
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: true
+    }, {type: GET_COMMENTS_FAILURE, error})).toEqual(
+      {
+        comments: [],
+        comment: [],
+        errorGet: error,
+        errorPost: '',
+        insertComment: '',
+        isFetchingComments: false
+      }
+    )
+  })
+
+  it('should have begin to perform the POST request for comments', () => {
+    expect(commentsReducer({
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: false
+    }, {type: POST_COMMENT_BEGIN})).toEqual(
+      {
+        comments: [],
+        comment: [],
+        errorGet: '',
+        errorPost: '',
+        insertComment: '',
+        isFetchingComments: true
+      }
+    )
+  })
+
+  it('should have successfully performed the POST request for comments', () => {
+    const resp = {
+      "comment" : "Example comment"
+    }
+    expect(commentsReducer({
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: true
+    }, {type: POST_COMMENT_SUCCESS, comment : resp})).toEqual(
+      {
+        comments: [],
+        comment: resp,
+        errorGet: '',
+        errorPost: '',
+        insertComment: '',
+        isFetchingComments: false
+      }
+    )
+  })
+
+  it('should have failed the POST request for comments', () => {
+    const error = {
+      "error" : "error POSTing comment"
+    }
+    expect(commentsReducer({
+      comments: [],
+      comment: [],
+      errorGet: '',
+      errorPost: '',
+      insertComment: '',
+      isFetchingComments: true
+    }, {type: POST_COMMENT_FAILURE, error})).toEqual(
+      {
+        comments: [],
+        comment: [],
+        errorGet: '',
+        errorPost: error,
+        insertComment: '',
+        isFetchingComments: false
       }
     )
   })
