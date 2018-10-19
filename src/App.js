@@ -28,6 +28,12 @@ class App extends Component {
       return next(action);
     }
 
+    const apimiddleware = store => next => action => {
+      if(action.type === 'GET_ISSUE_BEGIN') {
+        asdasddasdasd
+      }
+    }
+
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore(rootReducer, composeEnhancers(applyMiddleware(middleware, thunkMiddleware, loggerMiddleware)));
     return (
