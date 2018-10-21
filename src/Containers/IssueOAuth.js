@@ -1,6 +1,5 @@
 import React from 'react';
 import querystring from 'query-string';
-import axios from 'axios';
 import { Redirect } from 'react-router';
 import { connect } from 'react-redux';
 import { login } from '../redux/actions';
@@ -18,7 +17,7 @@ class IssueOAuth extends React.Component {
       redirect_uri : 'http://localhost:3000/callback',
       state : 'hello'
     });
-    login(code, query);
+    login(query);
   }
 
   render() {
@@ -45,7 +44,7 @@ const mapStateToProps = state => {
 //const mapDispatchToProps = { getIssue, getComments, postComment }
 
 const mapDispatchToProps = dispatch => ({
-  login: (code, query) => dispatch(login(code, query)),
+  login: (query) => dispatch(login(query)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(IssueOAuth)

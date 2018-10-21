@@ -1,8 +1,9 @@
 import React from 'react';
-import {Redirect} from 'react-router';
 import { Link } from 'react-router-dom';
 import { logout } from '../redux/actions';
 import { connect } from 'react-redux';
+import './LoginButton.css';
+
 
 
 class LoginButton extends React.Component{
@@ -10,15 +11,15 @@ class LoginButton extends React.Component{
     const { logout } = this.props
     if(localStorage.getItem('at') === '' && this.props.accessToken === '') {
       return (
-        <Link to={`/login`} >
-          <a className="button is-primary">Login with Github</a>
+        <Link className="google-button" to={`/login`} >
+          Login with Github
         </Link>
 
       )
     }
     else {
       return (
-        <a className="button is-danger" onClick={logout}>Log out</a>
+        <span className="google-button" onClick={logout}>Log out</span>
       )
     }
   }

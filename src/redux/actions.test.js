@@ -9,9 +9,10 @@ POST_COMMENT_FAILURE, UPDATE_PAGE_COUNT, INSERT_COMMENT } from './actions';
 import fetchMock from 'fetch-mock';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
+import { apiMiddleware, loggerMiddleware, tokenMiddleware } from './middleware';
 
 
-const middlewares = [thunk];
+const middlewares = [apiMiddleware, tokenMiddleware];
 const mockStore = configureStore(middlewares);
 
 describe('actions', () => {
@@ -19,7 +20,10 @@ describe('actions', () => {
     const number = 3
     const expectedAction = {
       type: UPDATE_PAGE_COUNT,
-      number
+      number,
+      meta: {
+        api_status: "NULL"
+      }
     }
     expect(actions.updatePageCount(number)).toEqual(expectedAction)
   })
@@ -28,7 +32,10 @@ describe('actions', () => {
     const value = 'a';
     const expectedAction = {
       type: GET_FILTERED_ISSUES_LIST,
-      value
+      value,
+      meta: {
+        api_status: "NULL"
+      }
     }
     expect(actions.getFilteredList(value)).toEqual(expectedAction)
   })
@@ -37,7 +44,10 @@ describe('actions', () => {
     const value = 'this is a comment';
     const expectedAction = {
       type: INSERT_COMMENT,
-      value
+      value,
+      meta: {
+        api_status: "NULL"
+      }
     }
     expect(actions.insertComment(value)).toEqual(expectedAction)
   })
@@ -53,10 +63,15 @@ describe('async actions', () => {
 
     const expectedAction = [{"type": "GET_ISSUES_BEGIN"},
     {
-      "isFetchingIssues": false,
-      "issues": {"issues": {"issues": ["mock issue"]}},
+      "payload": {
+        "data": {
+          "issues": {
+            "issues": ["mock issue"]
+          }
+        }, "isFetching": false
+      },
       "type": "GET_ISSUES_SUCCESS"
-    }];
+    }]
 
     const store = mockStore({ issues : []})
 
@@ -70,10 +85,15 @@ describe('async actions', () => {
 
     const expectedAction = [{"type": "GET_ISSUE_BEGIN"},
     {
-      "isFetchingIssue": false,
-      "issue": {"issue": {"issue": ["mock issue"]}},
+      "payload": {
+        "data": {
+          "issue": {
+            "issue": ["mock issue"]
+          }
+        }, "isFetching": false
+      },
       "type": "GET_ISSUE_SUCCESS"
-    }];
+    }]
 
     const store = mockStore({ issue : []})
 
@@ -83,18 +103,24 @@ describe('async actions', () => {
   })
 
   it('creates GET_COMMENTS_SUCCESS when getting comments has been done', () => {
-    fetchMock.getOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5", { issue: { issue: ['mock issue']}})
+    fetchMock.getOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5/comments", { comments: { comment: ['mock comment']}})
 
-    const expectedAction = [{"type": "GET_ISSUE_BEGIN"},
+    const expectedAction = [{"type": "GET_COMMENTS_BEGIN"},
     {
-      "isFetchingIssue": false,
-      "issue": {"issue": {"issue": ["mock issue"]}},
-      "type": "GET_ISSUE_SUCCESS"
-    }];
+      "payload": {
+        "data": {
+          "comments": {
+            "comment": ["mock comment"]
+          }
+        }, "isFetching": false
+      },
+      "type": "GET_COMMENTS_SUCCESS"
+    }]
+
 
     const store = mockStore({ issue : []})
 
-    return store.dispatch(actions.getIssue('sham-sheer', 'github-issues-viewer', '5')).then(() => {
+    return store.dispatch(actions.getComments('sham-sheer', 'github-issues-viewer', '5')).then(() => {
       expect(store.getActions()).toEqual(expectedAction)
     })
   })

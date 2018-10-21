@@ -15,7 +15,7 @@ const initialState = {
   filteredValue: '',
   filteredIssues: [],
   pageCount: 1,
-  isFetchingIssues: false,
+  isFetching: false,
   isError: false,
   error: null
 };
@@ -42,21 +42,21 @@ export function issuesReducer(state = initialState, action) {
     case GET_ISSUES_BEGIN :
       return {
         ...state,
-        isFetchingIssues : true,
+        isFetching : true,
       };
     case GET_ISSUES_SUCCESS :
       return {
         ...state,
-        issues : action.issues,
-        isFetchingIssues : false,
+        issues : action.payload.data,
+        isFetching : false,
         isError : false
       }
     case GET_ISSUES_FAILURE :
       return {
         ...state,
-        error : action.error,
+        error : action.payload.error,
         isError : true,
-        isFetchingIssues: false
+        isFetching: false
       }
     default:
       return state;
@@ -67,7 +67,7 @@ const initialIssueState = {
   id : '',
   issue : [],
   editing: false,
-  isFetchingIssue: false,
+  isFetching: false,
   isError: false
 };
 
@@ -76,20 +76,20 @@ export function issueReducer(state = initialIssueState, action) {
     case GET_ISSUE_BEGIN:
       return {
         ...state,
-        isFetchingIssue: true
+        isFetching: true
       }
     case GET_ISSUE_SUCCESS:
       return {
         ...state,
-        issue: action.issue,
-        isFetchingIssue: false
+        issue: action.payload.data,
+        isFetching: false
       }
     case GET_ISSUE_FAILURE:
       return {
         ...state,
-        error: action.error,
+        error: action.payload.error,
         isError: true,
-        isFetchingIssue: false
+        isFetching: false
       }
     default:
       return state;
@@ -102,7 +102,7 @@ const initialCommentsState = {
   errorGet: '',
   errorPost: '',
   insertComment: '',
-  isFetchingComments: false
+  isFetching: false
 }
 
 export function commentsReducer(state = initialCommentsState, action) {
@@ -115,13 +115,13 @@ export function commentsReducer(state = initialCommentsState, action) {
     case GET_COMMENTS_SUCCESS:
       return {
         ...state,
-        comments: action.comments,
+        comments: action.payload.data,
         isFetchingComments: false
       }
     case GET_COMMENTS_FAILURE:
       return {
         ...state,
-        errorGet: action.error,
+        errorGet: action.payload.error,
         isFetchingComments: false
 
       }
@@ -133,13 +133,13 @@ export function commentsReducer(state = initialCommentsState, action) {
     case POST_COMMENT_SUCCESS:
       return {
         ...state,
-        comment: action.comment,
+        comment: action.payload.data,
         isFetchingComments: false
       }
     case POST_COMMENT_FAILURE:
       return {
         ...state,
-        errorPost: action.error,
+        errorPost: action.payload.error,
         isFetchingComments: false
       }
     case INSERT_COMMENT:
@@ -166,12 +166,12 @@ export function loginReducer(state = initialLoginState, action) {
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        accessToken: action.accessToken
+        accessToken: action.payload.data.data.substring(13, 53)
       }
     case LOG_IN_FAILURE:
       return {
         ...state,
-        error: action.error
+        error: action.payload.error
       }
     case LOG_OUT:
       return {

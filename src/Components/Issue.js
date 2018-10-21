@@ -1,6 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import IssueLabel from './IssueLabel';
+import './LoginButton.css';
+
 
 const Issue = ({ id, title, user, pic, org, repo, labels, filteredValue }) => {
   //work in progress need to link straight to the issue instead of his profile
@@ -27,9 +29,10 @@ const Issue = ({ id, title, user, pic, org, repo, labels, filteredValue }) => {
           <div className="level-item has-text-centered">
             <div>
             <small className="form-text text-muted">#{id} opened by {name}</small>
-            <Link to={`/${org}/${repo}/${id}`} >
+            <NavLink
+              className="google-button" to={`/${org}/${repo}/${id}`} >
               <Highlight search={filteredValue}>{title}</Highlight>
-            </Link>
+            </NavLink>
             <ul className="list-group">
               {issueLabel}
             </ul>

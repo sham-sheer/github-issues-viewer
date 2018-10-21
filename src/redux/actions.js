@@ -25,160 +25,114 @@ export const LOG_IN_BEGIN = 'LOG_IN_BEGIN';
 export const LOG_IN_SUCCESS = 'LOG_IN_SUCCESS';
 export const LOG_IN_FAILURE = 'LOG_IN_FAILURE';
 export const LOG_OUT = 'LOG_OUT';
-
+export const GET_ISSUE = 'GET_ISSUE';
+export const GET_ISSUES = 'GET_ISSUES';
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const POST_COMMENT = 'POST_COMMENT';
+export const LOG_IN = 'LOG_IN';
 
 export function updatePageCount(number) {
   return {
     type: UPDATE_PAGE_COUNT,
-    number
+    number,
+    meta: {
+      api_status: 'NULL'
+    }
   }
 }
 
 export function getFilteredList(value) {
   return {
     type: GET_FILTERED_ISSUES_LIST,
-    value
-  }
-}
-
-export function getIssuesSuccess(resp) {
-  debugger
-  return {
-    type: GET_ISSUES_SUCCESS,
-    issues : resp,
-    isFetchingIssues : false,
-  }
-}
-
-export function getIssuesFailure(error) {
-  return {
-    type: GET_ISSUES_FAILURE,
-    error
+    value,
+    meta: {
+      api_status: 'NULL'
+    }
   }
 }
 
 export function getIssues(org, repo, page) {
-  return dispatch => {
-    dispatch({type : GET_ISSUES_BEGIN});
-    return fetch(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
-    .then(resp => resp.json())
-    .then(respJSON => dispatch(getIssuesSuccess(respJSON)))
-    .catch(error => dispatch(getIssuesFailure(error)));
-  }
-}
-
-export function getIssueSuccess(resp) {
   return {
-    type: GET_ISSUE_SUCCESS,
-    issue: resp,
-    isFetchingIssue: false,
-  }
-}
-
-export function getIssueFailure(error) {
-  return {
-    type: GET_ISSUE_FAILURE,
-    error
+    type: GET_ISSUES,
+    payload: {
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
+    },
+    meta: {
+      api_status: 'REQUEST',
+      call: 'GET'
+    }
   }
 }
 
 export function getIssue(org, repo, id) {
-  return dispatch => {
-    dispatch({type : GET_ISSUE_BEGIN});
-    return fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}`)
-    .then(resp => resp.json())
-    .then(respJSON => dispatch(getIssueSuccess(respJSON)))
-    .catch(error => dispatch(getIssueFailure(error)));
-  }
-}
-
-export function getCommentsSuccess(resp) {
   return {
-    type: GET_COMMENTS_SUCCESS,
-    comments: resp,
-    isFetchingComments: false,
-  }
-}
-
-export function getCommentsFailure(error) {
-  return {
-    type: GET_COMMENTS_FAILURE,
-    isFetchingComments: false,
-    error
+    type: GET_ISSUE,
+    payload: {
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}`)
+    },
+    meta: {
+      api_status : 'REQUEST',
+      call: 'GET'
+    }
   }
 }
 
 export function getComments(org, repo, id) {
-  return dispatch => {
-    dispatch({type : GET_COMMENTS_BEGIN});
-    return fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`)
-    .then(resp => resp.json())
-    .then(respJSON => dispatch(getCommentsSuccess(respJSON)))
-    .catch(error => dispatch(getCommentsFailure(error)));
+  return {
+    type: GET_COMMENTS,
+    payload: {
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`)
+    },
+    meta: {
+      api_status : 'REQUEST',
+      call: 'GET'
+    }
   }
 }
 
 export function postComment(org, repo, id, value) {
-  return dispatch => {
-    dispatch({type : POST_COMMENT_BEGIN});
-    return fetch({
-      url: `https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`,
-      method: 'post',
-      data: {
-        body: value
-      },
-      auth: {
-        username: 'sham-sheer',
-        password: '2feb1931b86a5646907851145cc9108f3fa145e7'
-      }
-    })
-    .then(resp => resp.json())
-    .then(respJSON => dispatch(postCommentSuccess(respJSON)))
-    .catch(error => dispatch(postCommentFailure(error)));
-  }
-}
-
-export function postCommentSuccess(resp) {
   return {
-    type: POST_COMMENT_SUCCESS,
-    comment: resp
-  }
-}
-
-export function postCommentFailure(error) {
-  return {
-    type: POST_COMMENT_FAILURE,
-    error
+    type: POST_COMMENT,
+    payload: {
+      call_api: fetch({
+        url: `https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`,
+        method: 'POST',
+        data: {
+          body: value
+        },
+        auth: {
+          username: 'sham-sheer',
+          password: '2feb1931b86a5646907851145cc9108f3fa145e7'
+        }
+      })
+    },
+    meta: {
+      api_status : 'REQUEST',
+      call: 'POST'
+    }
   }
 }
 
 export function insertComment(value) {
   return {
     type: INSERT_COMMENT,
-    value
+    value,
+    meta: {
+      api_status: 'NULL'
+    }
   }
 }
 
-export function loginSuccess(resp) {
+export function login(query) {
   return {
-    type: LOG_IN_SUCCESS,
-    accessToken: resp.data.substring(13, 53)
-  }
-}
-
-export function loginFailure(error) {
-  return {
-    type: LOG_IN_FAILURE,
-    error: error
-  }
-}
-
-export function login(code, query) {
-  return dispatch => {
-    dispatch({type : LOG_IN_BEGIN});
-    axios.post(`https://github.com/login/oauth/access_token?${query}`)
-    .then(resp => dispatch(loginSuccess(resp)))
-    .catch(error => dispatch(loginFailure(error)));
+    type: LOG_IN,
+    payload: {
+      call_api: axios.post(`https://github.com/login/oauth/access_token?${query}`)
+    },
+    meta: {
+      api_status : 'REQUEST',
+      call: 'POST'
+    }
   }
 }
 
@@ -186,5 +140,8 @@ export function logout() {
   localStorage.setItem('at', '');
   return {
     type: LOG_OUT,
+    meta: {
+      api_status: 'NULL'
+    }
   }
 }

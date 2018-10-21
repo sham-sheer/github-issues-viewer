@@ -17,7 +17,7 @@ describe('issues reducer', () => {
         filteredValue: '',
         filteredIssues: [],
         pageCount: 1,
-        isFetchingIssues: false,
+        isFetching: false,
         isError: false,
         error: null
       }
@@ -32,7 +32,7 @@ describe('issues reducer', () => {
       filteredValue: '',
       filteredIssues: [],
       pageCount: 1,
-      isFetchingIssues: false,
+      isFetching: false,
       isError: false,
       error: null
     }, {type: GET_ISSUES_BEGIN})).toEqual(
@@ -43,7 +43,7 @@ describe('issues reducer', () => {
         filteredValue: '',
         filteredIssues: [],
         pageCount: 1,
-        isFetchingIssues: true,
+        isFetching: true,
         isError: false,
         error: null
       }
@@ -94,10 +94,16 @@ describe('issues reducer', () => {
       filteredValue: '',
       filteredIssues: [],
       pageCount: 1,
-      isFetchingIssues: true,
+      isFetching: true,
       isError: false,
       error: null
-    },{type: GET_ISSUES_SUCCESS, issues : resp, isFetchingIssues: false})).toEqual(
+    },{
+      type: GET_ISSUES_SUCCESS,
+      payload: {
+        data: resp,
+        isFetching: false
+        }
+      })).toEqual(
       {
         issues: resp,
         org: 'rails',
@@ -105,7 +111,7 @@ describe('issues reducer', () => {
         filteredValue: '',
         filteredIssues: [],
         pageCount: 1,
-        isFetchingIssues: false,
+        isFetching: false,
         isError: false,
         error: null
       }
@@ -124,19 +130,24 @@ describe('issues reducer', () => {
       filteredValue: '',
       filteredIssues: [],
       pageCount: 1,
-      isFetchingIssues: true,
+      isFetching: true,
       isError: false,
       error: null
-    },{type: GET_ISSUES_FAILURE, error})).toEqual(
+    },{
+      type: GET_ISSUES_FAILURE,
+      payload: {
+        error,
+        isFetching: false
+        }
+      })).toEqual(
       {
         issues: [],
         org: 'rails',
         repo: 'rails',
         filteredValue: '',
         filteredIssues: [],
-
         pageCount: 1,
-        isFetchingIssues: false,
+        isFetching: false,
         isError: true,
         error: error
       }
@@ -279,25 +290,25 @@ describe('issue reducer', () => {
         id : '',
         issue : [],
         editing: false,
-        isFetchingIssue: false,
+        isFetching: false,
         isError: false
       }
     )
   })
 
-  it('should set isFetchingIssues boolean to be true', () => {
+  it('should set isFetching boolean to be true', () => {
     expect(issueReducer({
       id : '',
       issue : [],
       editing: false,
-      isFetchingIssue: false,
+      isFetching: false,
       isError: false
     }, {type: GET_ISSUE_BEGIN})).toEqual(
     {
       id : '',
       issue : [],
       editing: false,
-      isFetchingIssue: true,
+      isFetching: true,
       isError: false
       }
     )
@@ -313,14 +324,20 @@ describe('issue reducer', () => {
       id : '',
       issue : [],
       editing: false,
-      isFetchingIssue: true,
+      isFetching: true,
       isError: false
-    },{type: GET_ISSUE_SUCCESS, issue : resp, isFetchingIssues: false})).toEqual(
+    },{
+      type: GET_ISSUE_SUCCESS,
+      payload: {
+        data: resp,
+        isFetching: false
+        }
+      })).toEqual(
     {
         id : '',
         issue : resp,
         editing: false,
-        isFetchingIssue: false,
+        isFetching: false,
         isError: false
       }
     )
@@ -336,14 +353,20 @@ describe('issue reducer', () => {
       id : '',
       issue : [],
       editing: false,
-      isFetchingIssue: true,
+      isFetching: true,
       isError: false
-    },{type: GET_ISSUE_FAILURE, error})).toEqual(
+    },{
+      type: GET_ISSUE_FAILURE,
+      payload: {
+        error,
+        isFetching: false
+        }
+      })).toEqual(
     {
       id : '',
       issue : [],
       editing: false,
-      isFetchingIssue: false,
+      isFetching: false,
       isError: true,
       error: error
     })
@@ -368,9 +391,16 @@ describe('login reducer', () => {
     expect(loginReducer({
       accessToken: '',
       error: ''
-    }, {type: LOG_IN_SUCCESS, accessToken: 'accessToken'})).toEqual(
+    }, {
+      type: LOG_IN_SUCCESS,
+      payload: {
+        data: {
+          data: '62cf1b83cff40511db5e6b824e977ab2994d6107'
+        }
+      }
+      })).toEqual(
     {
-      accessToken: 'accessToken',
+      accessToken: '511db5e6b824e977ab2994d6107',
       error: ''
     }
     )
@@ -422,7 +452,13 @@ describe('commments reducer', () => {
       errorPost: '',
       insertComment: '',
       isFetchingComments: true
-    }, {type: GET_COMMENTS_SUCCESS, comments : resp})).toEqual(
+    },{
+      type: GET_COMMENTS_SUCCESS,
+      payload: {
+      data: resp,
+      isFetching: false
+      }
+    })).toEqual(
     {
       comments: resp ,
       comment: [],
@@ -445,7 +481,13 @@ describe('commments reducer', () => {
       errorPost: '',
       insertComment: '',
       isFetchingComments: true
-    }, {type: GET_COMMENTS_FAILURE, error})).toEqual(
+    }, {
+      type: GET_COMMENTS_FAILURE,
+      payload: {
+        error,
+        isFetching: false
+      }
+      })).toEqual(
       {
         comments: [],
         comment: [],
@@ -488,7 +530,12 @@ describe('commments reducer', () => {
       errorPost: '',
       insertComment: '',
       isFetchingComments: true
-    }, {type: POST_COMMENT_SUCCESS, comment : resp})).toEqual(
+    }, {
+      type: POST_COMMENT_SUCCESS,
+      payload: {
+        data: resp,
+      }
+      })).toEqual(
       {
         comments: [],
         comment: resp,
@@ -511,7 +558,12 @@ describe('commments reducer', () => {
       errorPost: '',
       insertComment: '',
       isFetchingComments: true
-    }, {type: POST_COMMENT_FAILURE, error})).toEqual(
+    }, {
+      type: POST_COMMENT_FAILURE,
+      payload: {
+        error
+      }
+    })).toEqual(
       {
         comments: [],
         comment: [],
