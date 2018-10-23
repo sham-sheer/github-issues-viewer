@@ -8,7 +8,7 @@ import { getIssue, getComments, postComment, insertComment } from '../redux/acti
 
 
 
-class IssueDescription extends Component {
+export class IssueDescription extends Component {
   componentWillMount() {
     const id = this.props.match.params.id;
     const org = this.props.match.params.org;
@@ -19,9 +19,7 @@ class IssueDescription extends Component {
   }
 
   handleCommentBoxChange = (event) => {
-    this.setState({
-      commentValue : event.target.value
-    })
+    this.props.handleCommentChange(event);
   }
 
   handleCommentBoxSubmit = (event) => {
@@ -49,9 +47,6 @@ class IssueDescription extends Component {
           <div className="content">{body}</div>
           <IssueComments comments = {comments}/>
           <IssueCommentBox
-            org={this.props.match.params.org}
-            repo={this.props.match.params.repo}
-            id={this.props.match.params.id}
             change={this.props.handleCommentChange}
             commentValue={this.props.commentValue}
             submitComment={this.handleCommentBoxSubmit}

@@ -124,30 +124,4 @@ describe('async actions', () => {
       expect(store.getActions()).toEqual(expectedAction)
     })
   })
-
-  //not working yet
-  /*it('creates POST_COMMENT_SUCCESS when posting comments has been done', () => {
-    const data =  {
-      body: 'posted comment'
-    }
-    fetchMock.postOnce("https://api.github.com/repos/sham-sheer/github-issues-viewer/issues/5/comments", {
-        status: 200,
-        body: JSON.stringify(data),
-        statusText: 'OK',
-        headers: {'Content-Type': 'application/json'},
-        sendAsJson: false
-      })
-
-    const expectedAction = [{"type": "POST_COMMENT_BEGIN"},
-    {
-      "comments": {"comment": {"body": ["posted comment"]}},
-      "type": "POST_COMMENT_SUCCESS"
-    }];
-
-    const store = mockStore({ issue : []})
-
-    return store.dispatch(actions.postComment('sham-sheer', 'github-issues-viewer', '5')).then(() => {
-      expect(store.getActions()).toEqual(expectedAction)
-    })
-  })*/
 })

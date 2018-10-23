@@ -55,7 +55,7 @@ export function getIssues(org, repo, page) {
   return {
     type: GET_ISSUES,
     payload: {
-      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`)
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues?page=${page}`),
     },
     meta: {
       api_status: 'REQUEST',
@@ -68,7 +68,7 @@ export function getIssue(org, repo, id) {
   return {
     type: GET_ISSUE,
     payload: {
-      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}`)
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}`),
     },
     meta: {
       api_status : 'REQUEST',
@@ -81,7 +81,7 @@ export function getComments(org, repo, id) {
   return {
     type: GET_COMMENTS,
     payload: {
-      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`)
+      call_api: fetch(`https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`),
     },
     meta: {
       api_status : 'REQUEST',
@@ -94,17 +94,18 @@ export function postComment(org, repo, id, value) {
   return {
     type: POST_COMMENT,
     payload: {
-      call_api: fetch({
+      call_api: axios({
         url: `https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`,
-        method: 'POST',
+        method: 'post',
         data: {
           body: value
         },
         auth: {
           username: 'sham-sheer',
-          password: '2feb1931b86a5646907851145cc9108f3fa145e7'
+          password: 'shamSHEER321'
         }
-      })
+      }),
+      url: `https://api.github.com/repos/${org}/${repo}/issues/${id}/comments`
     },
     meta: {
       api_status : 'REQUEST',
@@ -127,7 +128,8 @@ export function login(query) {
   return {
     type: LOG_IN,
     payload: {
-      call_api: axios.post(`https://github.com/login/oauth/access_token?${query}`)
+      call_api: axios.post(`https://github.com/login/oauth/access_token?${query}`),
+      url: `https://github.com/login/oauth/access_token?${query}`
     },
     meta: {
       api_status : 'REQUEST',

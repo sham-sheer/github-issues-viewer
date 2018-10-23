@@ -15,6 +15,7 @@ const Issue = ({ id, title, user, pic, org, repo, labels, filteredValue }) => {
     <IssueLabel name={label.name}
                 color={label.color}
                 url={label.url}
+                key={label.id}
     />
 
   );

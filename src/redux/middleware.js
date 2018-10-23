@@ -21,7 +21,7 @@ export const apiMiddleware = store => next => action => {
         }
       }));
     }
-    else {
+    if(action.meta.call === 'GET') {
       return action.payload.call_api
       .then(resp => resp.json())
       .then(respJSON => next({

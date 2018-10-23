@@ -1,6 +1,6 @@
 import React from 'react';
 
-const IssueCommentBox = ({ org, repo, id, change, commentValue, submitComment }) => {
+const IssueCommentBox = ({ change, commentValue, submitComment }) => {
    return(
       <form onSubmit={submitComment}>
         <div className="form-group">

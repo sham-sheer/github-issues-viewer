@@ -3,7 +3,7 @@ import pic from '../Components/pic.png';
 import IssuesList from '../Components/IssuesList';
 import Pagination from 'react-js-pagination';
 import './IssuesContainer.css';
-import IssueRTS from '../Components/IssueRTS';
+import IssueRTS from './IssueRTS';
 import { connect } from 'react-redux';
 import { getIssues, updatePageCount } from '../redux/actions';
 import LoginButton from '../Components/LoginButton';
